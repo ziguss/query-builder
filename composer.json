@@ -1,0 +1,19 @@
+{
+    "name": "ziguss/query-builder",
+    "type": "library",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ziguss",
+            "email": "yudoujia@163.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": { "ziguss\\QueryBuilder\\": "src/" }
+    },
+    "minimum-stability": "dev"
+}
