@@ -34,6 +34,7 @@ list($sql, $params) = (new SelectBuilder('mysql'))
         strtotime('20160101'),
         time()
     ])
+    ->andWhere('c6', 'like', 'abc')
     ->andWhere('t1.id', (new SelectBuilder('mysql'))->select('id')->from('table3'))
     ->result();
 ```
