@@ -7,8 +7,8 @@ namespace ziguss\QueryBuilder;
  */
 class SelectBuilder
 {
+    private static $grammar;
     protected $quoter;
-    protected $grammar;
     public $select;
     public $distinct;
     public $selectOption;
@@ -20,10 +20,21 @@ class SelectBuilder
     public $limit;
     public $offset;
     public $orderBy;
-    public $indexBy;
     public $union;
     public $params;
 
+    /**
+     * @return Grammar
+     */
+    public static function getGrammar()
+    {
+        if (self::$grammar === null) {
+            self::$grammar = new Grammar();
+        }
+
+        return self::$grammar;
+    }
+    
     /**
      * QueryBuilder constructor.
      * @param string $dbType the database type.
@@ -39,7 +50,7 @@ class SelectBuilder
      */
     public function result()
     {
-        return $this->getGrammar()->compile($this->quoter, $this, $this->params ?: []);
+        return self::getGrammar()->compile($this->quoter, $this, $this->params ?: []);
     }
     
     /**
@@ -356,16 +367,6 @@ class SelectBuilder
 
     /**
      * @param $column
-     * @return $this
-     */
-    public function indexBy($column)
-    {
-        $this->indexBy = $column;
-        return $this;
-    }
-
-    /**
-     * @param $column
      * @param null $operator
      * @param null $value
      * @return array
@@ -419,38 +420,5 @@ class SelectBuilder
             }
             return $result;
         }
-    }
-
-    /**
-     * @param array $rows
-     * @return array
-     */
-    protected function applyIndexBy($rows)
-    {
-        if ($this->indexBy === null) {
-            return $rows;
-        }
-        $result = [];
-        foreach ($rows as $row) {
-            if (is_string($this->indexBy)) {
-                $key = $row[$this->indexBy];
-            } else {
-                $key = call_user_func($this->indexBy, $row);
-            }
-            $result[$key] = $row;
-        }
-        return $result;
-    }
-
-    /**
-     * @return Grammar
-     */
-    public function getGrammar()
-    {
-        if ($this->grammar === null) {
-            $this->grammar = new Grammar();
-        }
-        
-        return $this->grammar;
     }
 }
