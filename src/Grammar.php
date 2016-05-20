@@ -208,12 +208,16 @@ class Grammar
     {
         $operands = [];
         foreach ($condition as $column => $value) {
+            $not = $column[0] === '!';
+            if ($not) {
+                $column = substr($column, 1);
+            }
             if (is_array($value) || $value instanceof SelectBuilder) {
-                $operator = 'IN';
+                $operator = $not ? 'NOT IN' : 'IN';
             } elseif ($value === null) {
-                $operator = 'IS';
+                $operator = $not ? 'IS NOT' : 'IS';
             } else {
-                $operator = '=';
+                $operator = $not ? '!=' : '=';
             }
             $operands[] = [$operator, $column, $value];
         }

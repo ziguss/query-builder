@@ -17,7 +17,7 @@ list($sql, $params) = (new SelectBuilder('mysql'))
         'c1' => 1,
         'c2' => ['v1', 'v2'],
         'c4' => null,
-        'c5' => false,
+        '!c5' => false,
     ])
     ->andWhere('c3', 1)
     ->andWhere('c3', [1, 2, 3])
@@ -42,43 +42,7 @@ list($sql, $params) = (new SelectBuilder('mysql'))
 `echo $sql;` will print:
 
 ```sql
-SELECT
-	` c1 `, ` c2 ` AS ` 2c `, ` c3 `, ` c4 `, 1 + 1
-FROM
-	` table1 ` ` t1 `
-INNER JOIN ` table2 ` ` t2 ` ON t1. ID = t2.t1_id
-WHERE
-	(
-		(
-			(
-				(
-					(
-						(
-							(` c1 ` = : qb0)
-							AND (` c2 ` IN(: qb1, : qb2))
-							AND (` c4 ` IS NULL)
-							AND (` c5 ` = FALSE)
-						)
-						AND (` c3 ` = : qb3)
-					)
-					AND (` c3 ` IN(: qb4, : qb5, : qb6))
-				)
-				AND (
-					(
-						` t1 `.` first_name `, ` t1 `.` last_name `
-					) IN ((: qb7, : qb8),(: qb9, : qb10))
-				)
-			)
-			AND (
-				` t1 `.` create_time ` BETWEEN : qb11
-				AND : qb12
-			)
-		)
-		AND (` c6 ` LIKE : qb13)
-	)
-AND (
-	` t1 `.` ID ` IN (SELECT ` ID ` FROM ` table3 `)
-)
+SELECT `c1`, `c2` AS `2c`, `c3`, `c4`, 1 + 1 FROM `table1` `t1` INNER JOIN `table2` `t2` ON t1.id = t2.t1_id WHERE (((((((`c1` != :qb0) AND (`c2` IN (:qb1, :qb2)) AND (`c4` IS NULL) AND (`c5` = false)) AND (`c3` = :qb3)) AND (`c3` IN (:qb4, :qb5, :qb6))) AND ((`t1`.`first_name`, `t1`.`last_name`) IN ((:qb7, :qb8), (:qb9, :qb10)))) AND (`t1`.`create_time` BETWEEN :qb11 AND :qb12)) AND (`c6` LIKE :qb13)) AND (`t1`.`id` IN (SELECT `id` FROM `table3`))
 ```
 
 ```php
